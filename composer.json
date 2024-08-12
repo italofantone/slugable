@@ -1,0 +1,38 @@
+{
+    "name": "italofantone/slugable",
+    "description": "Is a PHP library designed to simplify and automate the creation of URL-friendly slugs based on Laravel",
+    "type": "library",
+    "require": {
+        "php": "^8.3",
+        "illuminate/database": "^11.20",
+        "illuminate/support": "^11.20"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^11.3",
+        "orchestra/testbench": "^9.2"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Italofantone\\Slugable\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Italofantone\\Slugable\\Tests\\": "tests/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Italo Morales Fantone",
+            "email": "i@rimorsoft.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Italofantone\\Slugable\\SlugableServiceProvider"
+            ]
+        }
+    }
+}
