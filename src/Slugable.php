@@ -27,13 +27,14 @@ trait Slugable
             throw new InvalidArgumentException("The field [{$field}] is not fillable.");
         }
 
-        $slug = Str::slug($this->{$field}, config('slugable.separator'));
+        $separator = config('slugable.separator');
+        $slug = Str::slug($this->{$field}, $separator);
         $originalSlug = $slug;
 
         $count = 1;
 
         while ($this->slugAlreadyExists($slug)) {
-            $slug = $originalSlug . '-' . $count++;
+            $slug = $originalSlug . $separator . $count++;
         }
 
         $this->slug = $slug;
