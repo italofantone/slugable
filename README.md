@@ -34,6 +34,43 @@ class Lesson extends Model
 }
 ```
 
+**Migration example**: You need to create the slug field.
+
+```
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('lessons', function (Blueprint $table) {
+            $table->id();
+
+            $table->string('title');
+            $table->string('slug')->unique();
+            $table->text('body');
+
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('lessons');
+    }
+};
+```
+
 2. Customize the separator:
 
 You can customize the slug separator in the `config/slugable.php` file. For example:

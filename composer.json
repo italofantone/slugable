@@ -1,6 +1,7 @@
 {
     "name": "italofantone/slugable",
-    "description": "Is a PHP library designed to simplify and automate the creation of URL-friendly slugs based on Laravel",
+    "description": "Is a PHP library designed to simplify and automate the creation of URL-friendly slugs based on Laravel.",
+    "keywords": ["slug", "slugable", "eloquent", "laravel"],
     "type": "library",
     "require": {
         "php": "^8.3",
