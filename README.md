@@ -71,7 +71,11 @@ return new class extends Migration
 };
 ```
 
-2. Customize the separator:
+2. Customize the separator: Run the following command.
+
+```
+php artisan vendor:publish --tag=slugable-config
+```
 
 You can customize the slug separator in the `config/slugable.php` file. For example:
 
