@@ -3,10 +3,8 @@
 return [
     
     /**
-     * The field that will be used to generate the slug.
-     * e.g. 'my title' will be converted to 'my-title'.
-     * 
-     * Default: '-'.
+     * Separator used when generating slugs.
+     * e.g. 'my title' becomes 'my-title' by default.
      */
 
     'separator' => '-',

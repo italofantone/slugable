@@ -5,11 +5,11 @@ namespace Italofantone\Sluggable\Tests\Models;
 use Illuminate\Database\Eloquent\Model;
 use Italofantone\Sluggable\Sluggable;
 
-class TestModel extends Model
+class GuardedTestModel extends Model
 {
     use Sluggable;
 
-    protected $fillable = ['title', 'body'];
+    protected $table = 'test_models';
 
-    // ...
+    protected $guarded = [];
 }

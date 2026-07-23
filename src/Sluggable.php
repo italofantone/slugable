@@ -8,14 +8,12 @@ use InvalidArgumentException;
 
 trait Sluggable
 {
-    public static function bootSluggable()
+    public static function bootSluggable(): void
     {
-        static::creating(function (Model $model) {
-            $model->generateSlug();            
-        });
-
-        static::updating(function (Model $model) {
-            $model->generateSlug();
+        static::saving(function (Model $model) {
+            if ($model->shouldGenerateSlug()) {
+                $model->generateSlug();
+            }
         });
     }
 
@@ -23,11 +21,11 @@ trait Sluggable
     {
         $field = $this->getSlugSourceField();
 
-        if (!$this->isFillableField($field)) {
-            throw new InvalidArgumentException("The field [{$field}] is not fillable.");
+        if (! array_key_exists($field, $this->getAttributes())) {
+            throw new InvalidArgumentException("The field [{$field}] does not exist on the model.");
         }
 
-        $separator = config('sluggable.separator');
+        $separator = config('sluggable.separator', '-');
         $slug = Str::slug($this->{$field}, $separator);
         $originalSlug = $slug;
 
@@ -42,9 +40,13 @@ trait Sluggable
 
     protected function slugAlreadyExists(string $slug): bool
     {
-        return static::where('slug', $slug)
-            ->where('id', '!=', $this->id)
-            ->exists();
+        $query = static::where('slug', $slug);
+
+        if ($this->getKey() !== null) {
+            $query->where($this->getKeyName(), '!=', $this->getKey());
+        }
+
+        return $query->exists();
     }
 
     protected function getSlugSourceField(): string
@@ -52,8 +54,12 @@ trait Sluggable
         return property_exists($this, 'slugSourceField') ? $this->slugSourceField : 'title';
     }
 
-    protected function isFillableField(string $field): bool
+    protected function shouldGenerateSlug(): bool
     {
-        return in_array($field, $this->getFillable(), true);
+        $field = $this->getSlugSourceField();
+
+        return ! $this->exists
+            || $this->isDirty($field)
+            || blank($this->slug);
     }
 }

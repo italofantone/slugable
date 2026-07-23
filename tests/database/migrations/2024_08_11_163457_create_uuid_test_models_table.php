@@ -11,12 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('test_models', function (Blueprint $table) {
-            $table->id();
-
+        Schema::create('uuid_test_models', function (Blueprint $table) {
+            $table->string('uuid')->primary();
+            
             $table->string('title');
-            $table->string('slug')->unique();   
-            $table->text('body')->nullable();            
+            $table->string('slug')->unique();
 
             $table->timestamps();
         });
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('test_models');
+        Schema::dropIfExists('uuid_test_models');
     }
 };

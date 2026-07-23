@@ -2,8 +2,6 @@
 
 Is a PHP library designed to simplify and automate the creation of URL-friendly slugs based on Laravel.
 
-> ⚠️ This code was used for educational purposes [...]
-
 ### Installation
 
 You can install the sluggable package via composer. Run the following command:
@@ -34,6 +32,8 @@ class Lesson extends Model
 }
 ```
 
+The slug is generated on create and recalculated only when the source field changes.
+
 **Migration example**: You need to create the slug field.
 
 ```
@@ -61,13 +61,7 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
-    {
-        Schema::dropIfExists('lessons');
-    }
+    // ...
 };
 ```
 
@@ -85,10 +79,8 @@ You can customize the slug separator in the `config/sluggable.php` file. For exa
 return [
     
     /**
-     * The field that will be used to generate the slug.
-     * e.g. 'my title' will be converted to 'my-title'.
-     * 
-     * Default: '-'.
+     * Separator used when generating slugs.
+     * e.g. 'my title' becomes 'my-title' by default.
      */
 
     'separator' => '-',
@@ -128,9 +120,8 @@ With this configuration, the slug will be generated based on the `name` attribut
 
 ## Contact
 
-- **Email**: [i@rimorsoft.com](mailto:i@rimorsoft.com)
-- **Twitter**: [@italofantone](https://twitter.com/italofantone)
-- **LinkedIn**: [italofantone](https://linkedin.com/in/italofantone)
+- **Email**: [hola@italofantone.com](mailto:hola@italofantone.com).
+- **LinkedIn**: [italofantone](https://linkedin.com/in/italofantone).
 
 ## Donations
 

@@ -3,7 +3,9 @@
 namespace Italofantone\Sluggable\Tests;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Italofantone\Sluggable\Tests\Models\GuardedTestModel;
 use Italofantone\Sluggable\Tests\Models\TestModel;
+use Italofantone\Sluggable\Tests\Models\UuidTestModel;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
 
@@ -29,6 +31,21 @@ class SluggableTest extends TestCase
         $model->save();
 
         $this->assertEquals(Str::slug($newTitle), $model->slug);
+    }
+
+    public function test_it_keeps_slug_when_unrelated_attributes_change()
+    {
+        $model = TestModel::create([
+            'title' => 'Stable Title',
+            'body' => 'Original body',
+        ]);
+
+        $originalSlug = $model->slug;
+
+        $model->body = 'Updated body';
+        $model->save();
+
+        $this->assertSame($originalSlug, $model->slug);
     }
 
     public function test_it_generates_unique_slug_on_create()
@@ -57,21 +74,13 @@ class SluggableTest extends TestCase
         $this->assertEquals($expectedSlug, $model->slug);
     }  
     
-    public function test_it_throws_exception_if_slug_source_field_is_not_fillable()
+    public function test_it_generates_slug_when_source_field_is_guarded()
     {
-        $model = new class extends TestModel {
-            protected $slugSourceField = 'non_existent_field';
+        $model = GuardedTestModel::create([
+            'title' => 'Guarded Title',
+        ]);
 
-            public function generateSlug(): void
-            {
-                parent::generateSlug();
-            }
-        };
-
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage("The field [non_existent_field] is not fillable.");
-
-        $model->generateSlug();
+        $this->assertEquals(Str::slug('Guarded Title'), $model->slug);
     }
 
     public function test_it_generates_slug_with_custom_separator_on_create()
@@ -83,5 +92,23 @@ class SluggableTest extends TestCase
         $model = TestModel::create(['title' => $title]);
 
         $this->assertEquals(Str::slug($title, '+'), $model->slug);
+    }
+
+    public function test_it_generates_unique_slug_with_custom_primary_key()
+    {
+        UuidTestModel::create([
+            'uuid' => 'uuid-1',
+            'title' => 'Shared Title',
+        ]);
+
+        $model = UuidTestModel::create([
+            'uuid' => 'uuid-2',
+            'title' => 'Other Title',
+        ]);
+
+        $model->title = 'Shared Title';
+        $model->save();
+
+        $this->assertSame('shared-title-1', $model->slug);
     }
 }
